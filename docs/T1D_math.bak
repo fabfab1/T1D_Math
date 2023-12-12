@@ -31,9 +31,9 @@
 <body>
 
     <h1>Insulin Bolus Calculator</h1>
-<h3>This is a research tool only, do not use in medical contexts or to calculate and administer insulin. Use T1D_Math at your own risk, and do not use the information or code to make medical decisions.</h3>
-<h4>Version 231212 - 11:58</h4>
-        <!-- MCB I love you with all my heart -->
+    <h3>This is a research tool only, do not use in medical contexts or to calculate and administer insulin. Use T1D_Math at your own risk, and do not use the information or code to make medical decisions.</h3>
+    <h4>Version 231212 - 12:05</h4>
+    <!-- MCB I love you with all my heart -->
 
     <!-- Form to input values -->
     <form id="bolusForm">
@@ -73,11 +73,72 @@
         };
 
         function calculateBolus() {
-            // ... (previous calculateBolus code)
+            // Retrieve values from the form
+            var insulinFactor = parseFloat(document.getElementById("insulinFactor").value);
+            var carbs = parseInt(document.getElementById("carbs").value);
+            var pfus = parseInt(document.getElementById("pfus").value);
+
+            // Check if values are valid
+            if (isNaN(insulinFactor) || isNaN(carbs) || isNaN(pfus)) {
+                alert("Please enter valid numbers.");
+                return;
+            }
+
+            // Calculate total insulin
+            var totalInsulin = (carbs + pfus) / insulinFactor;
+
+            // Calculate extended bolus percentage
+            var extendedPercentage = (pfus / (carbs + pfus)) * 100;
+
+            // Display results
+            document.getElementById("totalInsulin").textContent = "Total Insulin: " + totalInsulin.toFixed(2) + " units";
+            document.getElementById("extendedPercentage").textContent = "Extended Bolus Percentage: " + extendedPercentage.toFixed(2) + "%";
+
+            // Save input information in a cookie
+            saveInputToCookie(insulinFactor, carbs, pfus);
+        }
+
+        function saveInputToCookie(insulinFactor, carbs, pfus) {
+            var currentDate = new Date();
+            var dateString = currentDate.toISOString();
+
+            // Create an object to store input information
+            var inputInfo = {
+                insulinFactor: insulinFactor,
+                carbs: carbs,
+                pfus: pfus
+            };
+
+            // Convert the object to a JSON string
+            var jsonString = JSON.stringify(inputInfo);
+
+            // Set the cookie with an expiration date (30 days in this case)
+            document.cookie = "bolusInput_" + dateString + "=" + jsonString + "; expires=" + new Date(currentDate.getTime() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+
+            // Display the date and time when the insulin factor was used
+            document.getElementById("lastInsulinFactorDate").textContent = "Last Insulin Factor Used: " + dateString;
         }
 
         function checkForCookie() {
-            // ... (previous checkForCookie code)
+            // Get all cookies
+            var allCookies = document.cookie.split(";");
+
+            // Loop through cookies to find the latest insulin factor cookie
+            for (var i = allCookies.length - 1; i >= 0; i--) {
+                var cookie = allCookies[i].trim();
+                if (cookie.indexOf("bolusInput_") === 0) {
+                    // Extract and parse the JSON data from the cookie
+                    var jsonData = cookie.substring("bolusInput_".length + 1);
+                    var inputInfo = JSON.parse(jsonData);
+
+                    // Populate the insulin factor input box
+                    document.getElementById("insulinFactor").value = inputInfo.insulinFactor;
+
+                    // Display the date and time when the insulin factor was used
+                    document.getElementById("lastInsulinFactorDate").textContent = "Last Insulin Factor Used: " + new Date(Date.parse(inputInfo.date)).toISOString();
+                    break;
+                }
+            }
         }
 
         function displayCSVData() {

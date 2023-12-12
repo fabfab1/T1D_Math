@@ -32,7 +32,7 @@
 
     <h1>Insulin Bolus Calculator</h1>
     <h3>This is a research tool only, do not use in medical contexts or to calculate and administer insulin. Use T1D_Math at your own risk, and do not use the information or code to make medical decisions.</h3>
-    <h4>Version 231212 - 12:05</h4>
+    <h4>Version 231212 - 11:58</h4>
     <!-- MCB I love you with all my heart -->
 
     <!-- Form to input values -->
@@ -55,9 +55,6 @@
     <h2>Results</h2>
     <p id="totalInsulin">Total Insulin: N/A</p>
     <p id="extendedPercentage">Extended Bolus Percentage: N/A</p>
-
-    <!-- Display last insulin factor date and time -->
-    <p id="lastInsulinFactorDate">Last Insulin Factor Used: N/A</p>
 
     <!-- Display CSV data as a table -->
     <h2>CSV Data</h2>
@@ -114,9 +111,6 @@
 
             // Set the cookie with an expiration date (30 days in this case)
             document.cookie = "bolusInput_" + dateString + "=" + jsonString + "; expires=" + new Date(currentDate.getTime() + 30 * 24 * 60 * 60 * 1000).toUTCString();
-
-            // Display the date and time when the insulin factor was used
-            document.getElementById("lastInsulinFactorDate").textContent = "Last Insulin Factor Used: " + dateString;
         }
 
         function checkForCookie() {
@@ -133,9 +127,6 @@
 
                     // Populate the insulin factor input box
                     document.getElementById("insulinFactor").value = inputInfo.insulinFactor;
-
-                    // Display the date and time when the insulin factor was used
-                    document.getElementById("lastInsulinFactorDate").textContent = "Last Insulin Factor Used: " + new Date(Date.parse(inputInfo.date)).toISOString();
                     break;
                 }
             }

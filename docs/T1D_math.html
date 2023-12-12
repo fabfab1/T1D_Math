@@ -15,6 +15,7 @@
 <body>
 
     <h1>Insulin Bolus Calculator</h1>
+    <h2>WARNING - This is for research purposes only, do not use to calculate actual insulin boluses! This is for research and programming purposes only!</h2>
 
     <!-- Form to input values -->
     <form id="bolusForm">
@@ -37,7 +38,15 @@
     <p id="totalInsulin">Total Insulin: N/A</p>
     <p id="extendedPercentage">Extended Bolus Percentage: N/A</p>
 
+    <!-- Display last insulin factor date and time -->
+    <p id="lastInsulinFactorDate">Last Insulin Factor Used: N/A</p>
+
     <script>
+        // Check for the presence of a cookie on page load
+        window.onload = function () {
+            checkForCookie();
+        };
+
         function calculateBolus() {
             // Retrieve values from the form
             var insulinFactor = parseFloat(document.getElementById("insulinFactor").value);
@@ -59,6 +68,52 @@
             // Display results
             document.getElementById("totalInsulin").textContent = "Total Insulin: " + totalInsulin.toFixed(2) + " units";
             document.getElementById("extendedPercentage").textContent = "Extended Bolus Percentage: " + extendedPercentage.toFixed(2) + "%";
+
+            // Save input information in a cookie
+            saveInputToCookie(insulinFactor, carbs, pfus);
+        }
+
+        function saveInputToCookie(insulinFactor, carbs, pfus) {
+            var currentDate = new Date();
+            var dateString = currentDate.toISOString();
+
+            // Create an object to store input information
+            var inputInfo = {
+                insulinFactor: insulinFactor,
+                carbs: carbs,
+                pfus: pfus
+            };
+
+            // Convert the object to a JSON string
+            var jsonString = JSON.stringify(inputInfo);
+
+            // Set the cookie with an expiration date (30 days in this case)
+            document.cookie = "bolusInput_" + dateString + "=" + jsonString + "; expires=" + new Date(currentDate.getTime() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+
+            // Display the date and time when the insulin factor was used
+            document.getElementById("lastInsulinFactorDate").textContent = "Last Insulin Factor Used: " + dateString;
+        }
+
+        function checkForCookie() {
+            // Get all cookies
+            var allCookies = document.cookie.split(";");
+
+            // Loop through cookies to find the latest insulin factor cookie
+            for (var i = allCookies.length - 1; i >= 0; i--) {
+                var cookie = allCookies[i].trim();
+                if (cookie.indexOf("bolusInput_") === 0) {
+                    // Extract and parse the JSON data from the cookie
+                    var jsonData = cookie.substring("bolusInput_".length + 1);
+                    var inputInfo = JSON.parse(jsonData);
+
+                    // Populate the insulin factor input box
+                    document.getElementById("insulinFactor").value = inputInfo.insulinFactor;
+
+                    // Display the date and time when the insulin factor was used
+                    document.getElementById("lastInsulinFactorDate").textContent = "Last Insulin Factor Used: " + new Date(Date.parse(inputInfo.date)).toISOString();
+                    break;
+                }
+            }
         }
     </script>
 

@@ -32,7 +32,7 @@
 
     <h1>Insulin Bolus Calculator</h1>
     <h3>This is a research tool only, do not use in medical contexts or to calculate and administer insulin. Use T1D_Math at your own risk, and do not use the information or code to make medical decisions.</h3>
-    <h4>Version 231212 - 12:23</h4>
+    <h4>Version 231212 - 14:02</h4>
     <!-- MCB I love you with all my heart -->
 
     <!-- Form to input values -->
@@ -134,7 +134,7 @@
 
         function displayCSVData() {
             // Fetch data from the CSV file
-            fetch('T1D_populate.csv', { mode: 'no-cors' }) // Add 'no-cors' mode
+            fetch('T1D_populate.csv') // Removed { mode: 'no-cors' }
                 .then(response => response.text())
                 .then(data => {
                     // Parse CSV data

@@ -137,39 +137,36 @@
         }
 
         function updateTableValuesInCookie() {
-            // Get all input elements in the table
-            var inputs = document.querySelectorAll('#factorTable input');
+            // ... (previous updateTableValuesInCookie code)
+        }
 
-            // Create an object to store table values
-            var tableValues = {
-                factorWeek1: inputs[0].value,
-                factorWeek2: inputs[1].value,
-                factorWeek3: inputs[2].value,
-                factorWeek4: inputs[3].value,
-                factorWeek5: inputs[4].value,
-                factorWeek6: inputs[5].value,
-                factorWeek7: inputs[6].value,
-                weekWeek1: inputs[7].value,
-                weekWeek2: inputs[8].value,
-                weekWeek3: inputs[9].value,
-                weekWeek4: inputs[10].value,
-                weekWeek5: inputs[11].value,
-                weekWeek6: inputs[12].value,
-                weekWeek7: inputs[13].value,
-                weekendWeek1: inputs[14].value,
-                weekendWeek2: inputs[15].value,
-                weekendWeek3: inputs[16].value,
-                weekendWeek4: inputs[17].value,
-                weekendWeek5: inputs[18].value,
-                weekendWeek6: inputs[19].value,
-                weekendWeek7: inputs[20].value,
-            };
+        function populateTableFromCSV() {
+            // Fetch data from the CSV file
+            fetch('T1D_populate.csv')
+                .then(response => response.text())
+                .then(data => {
+                    // Parse CSV data
+                    var rows = data.split('\n');
+                    var tableData = [];
 
-            // Convert the object to a JSON string
-            var jsonString = JSON.stringify(tableValues);
+                    for (var i = 0; i < rows.length; i++) {
+                        var rowData = rows[i].split(',');
+                        tableData.push(rowData.slice(1)); // Exclude the first element (header column)
+                    }
 
-            // Set the cookie with an expiration date (30 days in this case)
-            document.cookie = "tableValues=" + jsonString + "; expires=" + new Date(new Date().getTime() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+                    // Populate the table with CSV data
+                    for (var i = 0; i < tableData.length; i++) {
+                        for (var j = 0; j < tableData[i].length; j++) {
+                            var cellId = getCellId(i, j);
+                            document.getElementById(cellId).value = tableData[i][j];
+                        }
+                    }
+                })
+                .catch(error => console.error('Error fetching CSV:', error));
+        }
+
+        function getCellId(row, col) {
+            return "factorTable" + row + "_" + col;
         }
     </script>
 

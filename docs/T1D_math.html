@@ -32,7 +32,7 @@
 
     <h1>Insulin Bolus Calculator</h1>
     <h3>This is a research tool only, do not use in medical contexts or to calculate and administer insulin. Use T1D_Math at your own risk, and do not use the information or code to make medical decisions.</h3>
-    <h4>Version 231212 - 12:10</h4>
+    <h4>Version 231212 - 12:22</h4>
     <!-- MCB I love you with all my heart -->
 
     <!-- Form to input values -->
@@ -44,7 +44,7 @@
         <input type="number" id="carbs" required step="1"><br>
 
         <label for="pfus">Number of PFUs:</label>
-        <input type="number" id="pfus" required step="1"><br>
+        <input type="number" id="pfus" step="1"><br>
 
         <button type="button" onclick="calculateBolus()">Calculate Bolus</button>
     </form>
@@ -73,10 +73,10 @@
             // Retrieve values from the form
             var insulinFactor = parseFloat(document.getElementById("insulinFactor").value);
             var carbs = parseInt(document.getElementById("carbs").value);
-            var pfus = parseInt(document.getElementById("pfus").value);
+            var pfus = parseInt(document.getElementById("pfus").value) || 0; // Set to 0 if blank
 
             // Check if values are valid
-            if (isNaN(insulinFactor) || isNaN(carbs) || isNaN(pfus)) {
+            if (isNaN(insulinFactor) || isNaN(carbs)) {
                 alert("Please enter valid numbers.");
                 return;
             }

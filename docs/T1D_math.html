@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insulin Bolus Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Insulin Bolus Calculator</h1>
+
+    <!-- Form to input values -->
+    <form id="bolusForm">
+        <label for="insulinFactor">Insulin Factor:</label>
+        <input type="number" id="insulinFactor" required step="0.1"><br>
+
+        <label for="carbs">Number of Carbs:</label>
+        <input type="number" id="carbs" required step="1"><br>
+
+        <label for="pfus">Number of PFUs:</label>
+        <input type="number" id="pfus" required step="1"><br>
+
+        <button type="button" onclick="calculateBolus()">Calculate Bolus</button>
+    </form>
+
+    <hr>
+
+    <!-- Display results -->
+    <h2>Results</h2>
+    <p id="totalInsulin">Total Insulin: N/A</p>
+    <p id="extendedPercentage">Extended Bolus Percentage: N/A</p>
+
+    <script>
+        function calculateBolus() {
+            // Retrieve values from the form
+            var insulinFactor = parseFloat(document.getElementById("insulinFactor").value);
+            var carbs = parseInt(document.getElementById("carbs").value);
+            var pfus = parseInt(document.getElementById("pfus").value);
+
+            // Check if values are valid
+            if (isNaN(insulinFactor) || isNaN(carbs) || isNaN(pfus)) {
+                alert("Please enter valid numbers.");
+                return;
+            }
+
+            // Calculate total insulin
+            var totalInsulin = (carbs + pfus) / insulinFactor;
+
+            // Calculate extended bolus percentage
+            var extendedPercentage = (pfus / (carbs + pfus)) * 100;
+
+            // Display results
+            document.getElementById("totalInsulin").textContent = "Total Insulin: " + totalInsulin.toFixed(2) + " units";
+            document.getElementById("extendedPercentage").textContent = "Extended Bolus Percentage: " + extendedPercentage.toFixed(2) + "%";
+        }
+    </script>
+
+</body>
+</html>

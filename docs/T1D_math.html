@@ -80,7 +80,7 @@
 
         function displayCSVData() {
             // Fetch data from the CSV file
-            fetch('T1D_populate.csv')
+            fetch('T1D_populate.csv', { mode: 'no-cors' }) // Add 'no-cors' mode
                 .then(response => response.text())
                 .then(data => {
                     // Parse CSV data

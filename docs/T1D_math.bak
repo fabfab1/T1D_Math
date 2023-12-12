@@ -13,6 +13,8 @@
         table {
             border-collapse: collapse;
             margin-top: 20px;
+            width: 80%;
+            margin-left: 10%;
         }
         table, th, td {
             border: 1px solid black;
@@ -23,10 +25,6 @@
         }
         th {
             background-color: #f2f2f2;
-        }
-        td input {
-            width: 80px;
-            text-align: center;
         }
     </style>
 </head>
@@ -55,92 +53,32 @@
     <h2>Results</h2>
     <p id="totalInsulin">Total Insulin: N/A</p>
     <p id="extendedPercentage">Extended Bolus Percentage: N/A</p>
+
+    <!-- Display last insulin factor date and time -->
     <p id="lastInsulinFactorDate">Last Insulin Factor Used: N/A</p>
 
-    <!-- Interactive Table -->
-    <h2>Interactive Table</h2>
-    <table id="factorTable">
-        <tr>
-            <th></th>
-            <th>5:30-10:00</th>
-            <th>10:00-12:00</th>
-            <th>12:00-15:00</th>
-            <th>15:00-17:30</th>
-            <th>17:30-21:00</th>
-            <th>21:00-24:00</th>
-            <th>24:00-03:00</th>
-        </tr>
-        <tr>
-            <th>Factors</th>
-            <td><input type="number" id="factorWeek1"></td>
-            <td><input type="number" id="factorWeek2"></td>
-            <td><input type="number" id="factorWeek3"></td>
-            <td><input type="number" id="factorWeek4"></td>
-            <td><input type="number" id="factorWeek5"></td>
-            <td><input type="number" id="factorWeek6"></td>
-            <td><input type="number" id="factorWeek7"></td>
-        </tr>
-        <tr>
-            <th>Week</th>
-            <td><input type="number" id="weekWeek1"></td>
-            <td><input type="number" id="weekWeek2"></td>
-            <td><input type="number" id="weekWeek3"></td>
-            <td><input type="number" id="weekWeek4"></td>
-            <td><input type="number" id="weekWeek5"></td>
-            <td><input type="number" id="weekWeek6"></td>
-            <td><input type="number" id="weekWeek7"></td>
-        </tr>
-        <tr>
-            <th>Weekend</th>
-            <td><input type="number" id="weekendWeek1"></td>
-            <td><input type="number" id="weekendWeek2"></td>
-            <td><input type="number" id="weekendWeek3"></td>
-            <td><input type="number" id="weekendWeek4"></td>
-            <td><input type="number" id="weekendWeek5"></td>
-            <td><input type="number" id="weekendWeek6"></td>
-            <td><input type="number" id="weekendWeek7"></td>
-        </tr>
+    <!-- Display CSV data as a table -->
+    <h2>CSV Data</h2>
+    <table id="csvDataTable">
+        <!-- Table will be populated dynamically -->
     </table>
 
     <script>
-        // Check for the presence of a cookie and populate the insulin factor input box
+        // Check for the presence of a cookie on page load
         window.onload = function () {
             checkForCookie();
-            populateTableFromCookieOrCSV();
+            displayCSVData();
         };
 
         function calculateBolus() {
             // ... (previous calculateBolus code)
-
-            // Save input information in a cookie
-            saveInputToCookie(insulinFactor, carbs, pfus);
-        }
-
-        function saveInputToCookie(insulinFactor, carbs, pfus) {
-            // ... (previous saveInputToCookie code)
-
-            // Update the table values in the cookie
-            updateTableValuesInCookie();
         }
 
         function checkForCookie() {
             // ... (previous checkForCookie code)
         }
 
-        function populateTableFromCookieOrCSV() {
-            // ... (previous populateTableFromCookieOrCSV code)
-
-            // If there is no cookie or the cookie is absent, populate the table from the CSV file
-            if (!cookieFound) {
-                populateTableFromCSV();
-            }
-        }
-
-        function updateTableValuesInCookie() {
-            // ... (previous updateTableValuesInCookie code)
-        }
-
-        function populateTableFromCSV() {
+        function displayCSVData() {
             // Fetch data from the CSV file
             fetch('T1D_populate.csv')
                 .then(response => response.text())
@@ -151,22 +89,20 @@
 
                     for (var i = 0; i < rows.length; i++) {
                         var rowData = rows[i].split(',');
-                        tableData.push(rowData.slice(1)); // Exclude the first element (header column)
+                        tableData.push(rowData);
                     }
 
-                    // Populate the table with CSV data
+                    // Create and populate the table with CSV data
+                    var table = document.getElementById("csvDataTable");
                     for (var i = 0; i < tableData.length; i++) {
+                        var row = table.insertRow(i);
                         for (var j = 0; j < tableData[i].length; j++) {
-                            var cellId = getCellId(i, j);
-                            document.getElementById(cellId).value = tableData[i][j];
+                            var cell = row.insertCell(j);
+                            cell.innerHTML = tableData[i][j];
                         }
                     }
                 })
                 .catch(error => console.error('Error fetching CSV:', error));
-        }
-
-        function getCellId(row, col) {
-            return "factorTable" + row + "_" + col;
         }
     </script>
 

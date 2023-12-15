@@ -53,7 +53,7 @@
 
     <!-- Display results -->
     <h2>Results</h2>
-    <p id="totalCarbs">Total Carbs: N/A</p>
+    <p id="totalCarbs">Total Carbs + PFUs(x10): N/A</p>
     <p id="totalInsulin">Total Insulin: N/A</p>
     <p id="extendedPercentage">Extended Bolus Percentage: N/A</p>
 
@@ -90,7 +90,7 @@
             var extendedPercentage = (pfus / (carbs + pfus)) * 100;
 
             // Display results
-            document.getElementById("totalCarbs").textContent = "Total Carbs: " + totalCarbs.toFixed(2);
+            document.getElementById("totalCarbs").textContent = "Total Carbs + PFUs(x10): " + totalCarbs.toFixed(2);
             document.getElementById("totalInsulin").textContent = "Total Insulin: " + totalInsulin.toFixed(2) + " units";
             document.getElementById("extendedPercentage").textContent = "Extended Bolus Percentage: " + extendedPercentage.toFixed(2) + "%";
 

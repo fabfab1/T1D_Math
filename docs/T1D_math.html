@@ -32,8 +32,8 @@
 
     <h1>Insulin Bolus Calculator</h1>
     <h3>This is a research tool only, do not use in medical contexts or to calculate and administer insulin.<br> Use T1D_Math at your own risk, and do not use the information or code to make medical decisions.</h3>
-    <h4>Version 231212 - 14:47</h4>
-    <!-- MCB I love you with all my heart -->
+    <h4>Version 231215 - 22:44</h4>
+    <!-- MCB & BMRB I love you with all my heart -->
 
     <!-- Form to input values -->
     <form id="bolusForm">
@@ -43,7 +43,7 @@
         <label for="carbs">Number of Carbs:</label>
         <input type="number" id="carbs" required step="0.1"><br>
 
-        <label for="pfus">Number of PFUs:</label>
+        <label for="pfus">Number of PFUs (x 10, so like carbs not KEs):</label>
         <input type="number" id="pfus" step="0.1"><br><br>
 
         <button type="button" onclick="calculateBolus()">Calculate Bolus</button>
@@ -53,6 +53,7 @@
 
     <!-- Display results -->
     <h2>Results</h2>
+    <p id="totalCarbs">Total Carbs: N/A</p>
     <p id="totalInsulin">Total Insulin: N/A</p>
     <p id="extendedPercentage">Extended Bolus Percentage: N/A</p>
 
@@ -74,6 +75,7 @@
             var insulinFactor = parseFloat(document.getElementById("insulinFactor").value);
             var carbs = parseFloat(document.getElementById("carbs").value);
             var pfus = parseFloat(document.getElementById("pfus").value) || 0; // Set to 0 if blank
+            var totalCarbs = carbs + pfus;
 
             // Check if values are valid
             if (isNaN(insulinFactor) || isNaN(carbs)) {
@@ -82,17 +84,18 @@
             }
 
             // Calculate total insulin
-            var totalInsulin = (carbs + pfus) / insulinFactor;
+            var totalInsulin = (totalCarbs) / insulinFactor;
 
             // Calculate extended bolus percentage
             var extendedPercentage = (pfus / (carbs + pfus)) * 100;
 
             // Display results
+            document.getElementById("totalCarbs").textContent = "Total Carbs: " + totalCarbs.toFixed(2);
             document.getElementById("totalInsulin").textContent = "Total Insulin: " + totalInsulin.toFixed(2) + " units";
             document.getElementById("extendedPercentage").textContent = "Extended Bolus Percentage: " + extendedPercentage.toFixed(2) + "%";
 
             // Save input information in a cookie
-            saveInputToCookie(insulinFactor, carbs, pfus);
+            saveInputToCookie(insulinFactor, totalCarbs, carbs, pfus);
         }
 
         function saveInputToCookie(insulinFactor, carbs, pfus) {

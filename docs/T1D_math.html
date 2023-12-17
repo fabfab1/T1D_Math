@@ -32,7 +32,8 @@
 
     <h1>Insulin Bolus Calculator</h1>
     <h3>This is a research tool only, do not use in medical contexts or to calculate and administer insulin.<br> Use T1D_Math at your own risk, and do not use the information or code to make medical decisions.</h3>
-    <h4>Version 231215 - 22:44</h4>
+    <h4>Version 231217 - 12:39</h4>
+
     <!-- MCB & BMRB I love you with all my heart -->
 
     <!-- Form to input values -->
@@ -63,105 +64,7 @@
         <!-- Table will be populated dynamically -->
     </table>
 
-    <script>
-        // Check for the presence of a cookie on page load
-        window.onload = function () {
-            checkForCookie();
-            displayCSVData();
-        };
-
-        function calculateBolus() {
-            // Retrieve values from the form
-            var insulinFactor = parseFloat(document.getElementById("insulinFactor").value);
-            var carbs = parseFloat(document.getElementById("carbs").value);
-            var pfus = parseFloat(document.getElementById("pfus").value) || 0; // Set to 0 if blank
-            var totalCarbs = carbs + pfus;
-
-            // Check if values are valid
-            if (isNaN(insulinFactor) || isNaN(carbs)) {
-                alert("Please enter valid numbers.");
-                return;
-            }
-
-            // Calculate total insulin
-            var totalInsulin = (totalCarbs) / insulinFactor;
-
-            // Calculate extended bolus percentage
-            var extendedPercentage = (pfus / (carbs + pfus)) * 100;
-
-            // Display results
-            document.getElementById("totalCarbs").textContent = "Total Carbs + PFUs(x10): " + totalCarbs.toFixed(2);
-            document.getElementById("totalInsulin").textContent = "Total Insulin: " + totalInsulin.toFixed(2) + " units";
-            document.getElementById("extendedPercentage").textContent = "Extended Bolus Percentage: " + extendedPercentage.toFixed(2) + "%";
-
-            // Save input information in a cookie
-            saveInputToCookie(insulinFactor, totalCarbs, carbs, pfus);
-        }
-
-        function saveInputToCookie(insulinFactor, carbs, pfus) {
-            var currentDate = new Date();
-            var dateString = currentDate.toISOString();
-
-            // Create an object to store input information
-            var inputInfo = {
-                insulinFactor: insulinFactor,
-                carbs: carbs,
-                pfus: pfus
-            };
-
-            // Convert the object to a JSON string
-            var jsonString = JSON.stringify(inputInfo);
-
-            // Set the cookie with an expiration date (30 days in this case)
-            document.cookie = "bolusInput_" + dateString + "=" + jsonString + "; expires=" + new Date(currentDate.getTime() + 30 * 24 * 60 * 60 * 1000).toUTCString();
-        }
-
-        function checkForCookie() {
-            // Get all cookies
-            var allCookies = document.cookie.split(";");
-
-            // Loop through cookies to find the latest insulin factor cookie
-            for (var i = allCookies.length - 1; i >= 0; i--) {
-                var cookie = allCookies[i].trim();
-                if (cookie.indexOf("bolusInput_") === 0) {
-                    // Extract and parse the JSON data from the cookie
-                    var jsonData = cookie.substring("bolusInput_".length + 1);
-                    var inputInfo = JSON.parse(jsonData);
-
-                    // Populate the insulin factor input box
-                    document.getElementById("insulinFactor").value = inputInfo.insulinFactor;
-                    break;
-                }
-            }
-        }
-
-        function displayCSVData() {
-            // Fetch data from the CSV file
-            fetch('T1D_populate.csv') // Removed { mode: 'no-cors' }
-                .then(response => response.text())
-                .then(data => {
-                    // Parse CSV data
-                    var rows = data.split('\n');
-                    var tableData = [];
-
-                    for (var i = 0; i < rows.length; i++) {
-                        var rowData = rows[i].split(',');
-                        tableData.push(rowData);
-                    }
-
-                    // Create and populate the table with CSV data
-                    var table = document.getElementById("csvDataTable");
-                    for (var i = 0; i < tableData.length; i++) {
-                        var row = table.insertRow(i);
-                        for (var j = 0; j < tableData[i].length; j++) {
-                            var cell = row.insertCell(j);
-                            cell.innerHTML = tableData[i][j];
-                        }
-                    }
-                })
-                .catch(error => console.error('Error fetching CSV:', error));
-        }
-    </script>
+<script src="T1D_math_calc.js"></script>
 
 </body>
 </html>

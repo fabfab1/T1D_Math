@@ -2,33 +2,30 @@
 
 // Async function to fetch and display CSV data
 async function displayCSVData() {
-    try {
-        const response = await fetch('T1D_populate.csv');
-        const data = await response.text();
+    // Fetch the CSV data
+    fetch('./T1D_populate.csv')
+        .then(response => response.text())
+        .then(data => {
+            // Parse the CSV data
+            const rows = data.split('\n');
+            const parsedData = rows.map(row => row.split(','));
 
-        // Parse CSV data
-        let rows = data.split('\n');
-        let tableData = [];
+            // Create a table from the parsed CSV data
+            let table = document.createElement('table');
+            parsedData.forEach(rowData => {
+                let row = document.createElement('tr');
+                rowData.forEach(cellData => {
+                    let cell = document.createElement('td');
+                    cell.appendChild(document.createTextNode(cellData));
+                    row.appendChild(cell);
+                });
+                table.appendChild(row);
+            });
 
-        for (let i = 0; i < rows.length; i++) {
-            let rowData = rows[i].split(',');
-            tableData.push(rowData);
-        }
-
-        // Create and populate the table with CSV data
-        let table = document.getElementById("csvDataTable");
-        for (let i = 0; i < tableData.length; i++) {
-            let row = table.insertRow(i);
-            for (let j = 0; j < tableData[i].length; j++) {
-                let cell = row.insertCell(j);
-                cell.innerHTML = tableData[i][j];
-            }
-        }
-    } catch (error) {
-        console.error('Error fetching CSV:', error);
-        // Inform the user that an error occurred
-        document.getElementById('csvDataTable').textContent = 'Error fetching CSV data.';
-    }
+            // Insert the table into the HTML
+            document.getElementById('csvDataTable').appendChild(table);
+        })
+        .catch(error => console.error('Error:', error));
 }
 
 function calculateBolus() {

@@ -32,7 +32,7 @@
 
     <h1>Insulin Bolus Calculator</h1>
     <h3>This is a research tool only, do not use in medical contexts or to calculate and administer insulin.<br> Use T1D_Math at your own risk, and do not use the information or code to make medical decisions.</h3>
-    <h4>Version 231221 - 18:38</h4>
+    <h4>Version 231221 - 18:50</h4>
 
     <!-- MCB & BMRB I love you with all my heart -->
 
@@ -58,11 +58,12 @@
     <p id="totalInsulin">Total Insulin: N/A</p>
     <p id="extendedPercentage">Extended Bolus Percentage: N/A</p>
 
-    <!-- Display CSV data as a table -->
-    <h2>CSV Data</h2>
-    <table id="csvDataTable">
-        <!-- Table will be populated dynamically -->
-    </table>
+<!-- Display CSV data as a table -->
+<h2>CSV Data</h2>
+<iframe id="csvDataTable" src="T1D_populate.html">
+    <!-- Fallback content for browsers that don't support iframes -->
+    Your browser does not support iframes.
+</iframe>
 
     <h2>Formulae</h2>
     <p>PFU calculation = 1g fat is 9kcal; 1g protein is 4kcal; 100kcal is 1FPU (=1KE)</p>

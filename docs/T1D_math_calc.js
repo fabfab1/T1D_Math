@@ -3,7 +3,7 @@
 // Async function to fetch and display CSV data
 async function displayCSVData() {
     // Fetch the CSV data
-    fetch('./T1D_populate.csv')
+    fetch('./T1D_populate.txt')
         .then(response => response.text())
         .then(data => {
             // Parse the CSV data
@@ -51,4 +51,8 @@ function calculateBolus() {
     document.getElementById("totalCarbs").textContent = "Total Carbs + PFUs: " + totalCarbs;
     document.getElementById("totalInsulin").textContent = "Total Insulin: " + totalInsulin;
     document.getElementById("extendedPercentage").textContent = "Extended Bolus Percentage: " + percentage.toFixed(2) + "%";
+}
+
+window.onload = function() {
+    displayCSVData();
 }

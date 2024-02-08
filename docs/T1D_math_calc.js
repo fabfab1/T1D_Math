@@ -17,8 +17,15 @@ function calculateBolus() {
     // Calculate percentage (example: percentage of insulin in total carbs)
     let percentage = (pfus / totalCarbs) * 100;
 
+    // Convert the percentage to a decimal
+    var extendedBolusDecimal = percentage / 100;
+
+    // Calculate the Extended Bolus in terms of Insulin IUs
+    var extendedBolusInsulin = totalInsulin * extendedBolusDecimal;
+
     // Display the results
     document.getElementById("totalCarbs").textContent = "Total Carbs + PFUs: " + totalCarbs;
     document.getElementById("totalInsulin").textContent = "Total Insulin: " + totalInsulin;
     document.getElementById("extendedPercentage").textContent = "Extended Bolus Percentage: " + percentage.toFixed(2) + "%";
+    document.getElementById('extendedBolusInsulin').textContent = 'Extended Bolus in Insulin IUs: ' + extendedBolusInsulin;
 }
